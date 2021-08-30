@@ -1,7 +1,6 @@
 package de.chen.applicantDB.entity;
 
 import com.sun.istack.NotNull;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Applicant {
+    //Required information for an applicant
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -57,7 +57,14 @@ public class Applicant {
     @NotNull
     private String applicationStatus;
 
-    public long getId() { return id; }
+    //Getter and Setter
+    public long getId() {
+        return id;
+    }
+
+    public void setId() {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;

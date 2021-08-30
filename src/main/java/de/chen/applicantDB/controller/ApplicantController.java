@@ -3,6 +3,8 @@ package de.chen.applicantDB.controller;
 import de.chen.applicantDB.entity.Applicant;
 import de.chen.applicantDB.repo.ApplicantRepo;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -27,12 +29,14 @@ public class ApplicantController {
      */
     @GetMapping(path = "/all")
     public List<Applicant> getAll() {
-
         return applicantRepo.findAll();
     }
 
+
     /**
      * Creates a new applicant entry in the database.
+     * If an applicant already exists in the database, throw exception.
+     * This is done by checking, whether the email address already exists.
      * @param firstName Vorname
      * @param lastName  Nachname
      * @param email E-Mail-Adresse
@@ -44,10 +48,14 @@ public class ApplicantController {
      * @return A newly created applicant, saved in the database.
      */
     @PostMapping(path = "/add")
-    public @ResponseBody Applicant addNewApplicant(@RequestParam String firstName, @RequestParam String lastName,
+    public @ResponseBody String addNewApplicant(@RequestParam String firstName, @RequestParam String lastName,
                                                 @RequestParam String email, @RequestParam long phoneNumber,
                                                 @RequestParam String desiredPosition, @RequestParam String jobStatus,
-                                                @RequestParam long desiredSalary, @RequestParam String applicationStatus) {
+                                                @RequestParam long desiredSalary, @RequestParam String applicationStatus) throws Exception {
+
+        if(!applicantRepo.findByEmail(email).isEmpty()) {
+            throw new Exception("Email/Bewerber existiert bereits.");
+        }
 
         Applicant n = new Applicant();
         n.setFirstName(firstName);
@@ -58,20 +66,20 @@ public class ApplicantController {
         n.setJobStatus(jobStatus);
         n.setDesiredSalary(desiredSalary);
         n.setApplicationStatus(applicationStatus);
-        return applicantRepo.save(n);
+        applicantRepo.save(n);
+        return "Bewerber hinzugefügt.";
 
     }
 
     /**
      * Updates existing applicant's information, by finding them in the first place with findById()
-     * @param applicant
+     * @param applicant Existing applicant
      * @return Existing applicant with newly edited information.
      */
-    @PostMapping(path = "/update")
-    public @ResponseBody Applicant updateApplicant(Applicant applicant) {
+    @PutMapping(path = "/update")
+    public String updateApplicant(Applicant applicant, long id) {
 
-        Applicant existingApplicant = applicantRepo.findById(applicant.getId()).orElse(null);
-        assert existingApplicant != null;
+        Applicant existingApplicant = applicantRepo.findById(id).orElse(null);
         existingApplicant.setFirstName(applicant.getFirstName());
         existingApplicant.setLastName((applicant.getLastName()));
         existingApplicant.setEmail(applicant.getEmail());
@@ -80,8 +88,20 @@ public class ApplicantController {
         existingApplicant.setJobStatus(applicant.getJobStatus());
         existingApplicant.setDesiredSalary(applicant.getDesiredSalary());
         existingApplicant.setApplicationStatus(applicant.getApplicationStatus());
-        return applicantRepo.save(existingApplicant);
+        applicantRepo.save(existingApplicant);
+        return "Bewerberdaten geändert.";
 
+    }
+
+    /**
+     * Delete the applicant by giving the Id.
+     * @param id Id of the "to be deleted" applicant.
+     * @return Delete conformation.
+     */
+    @DeleteMapping(path = "/delete")
+    public @ResponseBody String deleteApplicant(@RequestParam long id) {
+        applicantRepo.deleteById(id);
+        return "Bewerber entfernt.";
     }
 
 }
