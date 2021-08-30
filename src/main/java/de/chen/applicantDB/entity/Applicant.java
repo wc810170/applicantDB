@@ -1,11 +1,11 @@
 package de.chen.applicantDB.entity;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Applicant {
@@ -13,19 +13,29 @@ public class Applicant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull
+    @NotBlank
     private String firstName;
 
-    @NotNull
+    @NotBlank
     private String lastName;
 
-    @NotNull
+    @NotBlank
+    @Email
     private String email;
 
+    @NotBlank
     private long phoneNumber;
+
+    @NotBlank
     private String desiredPosition;
+
+    @NotBlank
     private String jobStatus;
+
+    @NotBlank
     private long desiredSalary;
+
+    @NotBlank
     private String applicationStatus;
 
     public long getId() { return id; }
