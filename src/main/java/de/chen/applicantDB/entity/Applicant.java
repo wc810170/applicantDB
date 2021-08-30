@@ -1,4 +1,6 @@
-package de.chen.applicantDB.object;
+package de.chen.applicantDB.entity;
+
+import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,26 +13,22 @@ public class Applicant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
     private String firstName;
 
+    @NotNull
     private String lastName;
 
+    @NotNull
     private String email;
 
     private long phoneNumber;
-
     private String desiredPosition;
-
     private String jobStatus;
-
     private long desiredSalary;
-
     private String applicationStatus;
 
-    public long getId() {
-        return id;
-    }
-
+    public long getId() { return id; }
     public void setId(long id) {
         this.id = id;
     }
@@ -38,7 +36,6 @@ public class Applicant {
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -46,7 +43,6 @@ public class Applicant {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -54,7 +50,6 @@ public class Applicant {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -62,7 +57,6 @@ public class Applicant {
     public long getPhoneNumber() {
         return phoneNumber;
     }
-
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -70,7 +64,6 @@ public class Applicant {
     public String getDesiredPosition() {
         return desiredPosition;
     }
-
     public void setDesiredPosition(String desiredPosition) {
         this.desiredPosition = desiredPosition;
     }
@@ -78,7 +71,6 @@ public class Applicant {
     public String getJobStatus() {
         return jobStatus;
     }
-
     public void setJobStatus(String jobStatus) {
         this.jobStatus = jobStatus;
     }
@@ -86,7 +78,6 @@ public class Applicant {
     public long getDesiredSalary() {
         return desiredSalary;
     }
-
     public void setDesiredSalary(long desiredSalary) {
         this.desiredSalary = desiredSalary;
     }
@@ -94,7 +85,6 @@ public class Applicant {
     public String getApplicationStatus() {
         return applicationStatus;
     }
-
     public void setApplicationStatus(String applicationStatus) {
         this.applicationStatus = applicationStatus;
     }

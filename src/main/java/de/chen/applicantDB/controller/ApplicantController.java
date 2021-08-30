@@ -1,10 +1,8 @@
 package de.chen.applicantDB.controller;
 
-import de.chen.applicantDB.object.Applicant;
+import de.chen.applicantDB.entity.Applicant;
 import de.chen.applicantDB.repo.ApplicantRepo;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,14 +10,48 @@ import java.util.List;
 @RequestMapping("/Applicant")
 public class ApplicantController {
 
-    private ApplicantRepo applicantRepo;
+    private final ApplicantRepo applicantRepo;
 
-    public ApplicantController(ApplicantRepo applicantRepo) {
-        this.applicantRepo = applicantRepo;
+    public ApplicantController(ApplicantRepo applicantRepo) { this.applicantRepo = applicantRepo; }
+
+    @GetMapping(path = "/all")
+    public List<Applicant> getAll() { return applicantRepo.findAll(); }
+
+    @PostMapping(path = "/add")
+    public @ResponseBody String addNewApplicant(@RequestParam String firstName, @RequestParam String lastName,
+                                                @RequestParam String email, @RequestParam long phoneNumber,
+                                                @RequestParam String desiredPosition, @RequestParam String jobStatus,
+                                                @RequestParam long desiredSalary, @RequestParam String applicationStatus) {
+
+        Applicant n = new Applicant();
+        n.setFirstName(firstName);
+        n.setLastName(lastName);
+        n.setEmail(email);
+        n.setPhoneNumber(phoneNumber);
+        n.setDesiredPosition(desiredPosition);
+        n.setJobStatus(jobStatus);
+        n.setDesiredSalary(desiredSalary);
+        n.setApplicationStatus(applicationStatus);
+        applicantRepo.save(n);
+        return "Bewerberdaten gespeichert.";
+
     }
 
-    @GetMapping("")
-    public List<Applicant> showAll() {
-        return applicantRepo.findAll();
+    @PostMapping(path = "/update")
+    public @ResponseBody String updateApplicant(Applicant applicant) {
+
+        Applicant existingApplicant = applicantRepo.findById(applicant.getId()).orElse(null);
+        existingApplicant.setFirstName(applicant.getFirstName());
+        existingApplicant.setLastName((applicant.getLastName()));
+        existingApplicant.setEmail(applicant.getEmail());
+        existingApplicant.setPhoneNumber(applicant.getPhoneNumber());
+        existingApplicant.setDesiredPosition(applicant.getDesiredPosition());
+        existingApplicant.setJobStatus(applicant.getJobStatus());
+        existingApplicant.setDesiredSalary(applicant.getDesiredSalary());
+        existingApplicant.setApplicationStatus(applicant.getApplicationStatus());
+        applicantRepo.save(existingApplicant);
+        return "Bewerberdaten geändert.";
+
     }
+
 }
